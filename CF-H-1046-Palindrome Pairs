@@ -1,0 +1,39 @@
+// #bitmasks 
+#include <bits/stdc++.h>
+using namespace std;
+#define _ ios_base::sync_with_stdio(false);cin.tie(0);cout.tie(0);
+
+void flip_bit(int &msk, int ind){
+	msk ^= (1<<ind);
+}
+
+int main() {_
+ll n,ans=0;
+string s;
+map<int,int> pal;
+cin >> n;
+while(n--){
+    cin >> s;
+    int msk=0;
+    int l=s.length();
+    //if a carac occure odd times (s[i]-'a')th bit will 1 otherwise 0
+    for(int i=0;i<l;i++){
+            flip_bit(msk,s[i]-'a');
+    }
+    ans+=pal[msk]; // if there exist same masks we add em to ans then we push this musk in the map pal 
+    pal[msk]++;
+    //if two masks differs in only one bit the they can form a palindrome expl
+    /* aab  mask=010 
+       aacc mask=000
+       aacbcaa is palin
+        concatination has an odd length because only one bits setted differs
+        try more expls to notice that
+     */
+    for(int i=0;i<26;i++){
+        flip_bit(msk,i);
+        ans+=pal[msk];
+        flip_bit(msk,i);
+    }
+}
+cout << ans ;
+}
