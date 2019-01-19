@@ -1,0 +1,45 @@
+//there is an observation that if there is a way to make the problemset
+//so we can make it with two problems 
+//brute force over all possible combinations 2^k and check if they exist and if a&b==0
+#include <bits/stdc++.h>
+using namespace std;
+#define _ ios_base::sync_with_stdio(false);cin.tie(0);cout.tie(0);
+#define all(x) x.begin(),x.end()
+#define F first
+#define S second
+#define MP make_pair
+#define PB push_back
+#define mod 998244353
+typedef long long ll;
+const ll oo = 1e9;
+const int N = 1e5 + 1, MOD = 1e9 + 7;
+const double eps = 1e-5;
+
+int n,t[N][4],k;
+map<int,int> exist;
+
+int main() {_
+    cin >> n >> k;
+    for(int i=0;i<n;i++){
+        int mask=0,x;
+        for(int j=0;j<k;j++){
+            cin >> x;
+            if(x)
+                mask |= (1 << j);
+        }
+        if(mask==0){
+            cout << "YES";
+            return 0;
+        }
+        exist[mask]=1;
+    }
+    for(int i=0;i<pow(2,k);i++){
+        for(int j=0;j<pow(2,k);j++){
+            if(exist[i] && exist[j] && (i&j)==0){
+                cout << "YES";
+                return 0;
+            }
+        }
+    }
+    cout << "NO";
+}
