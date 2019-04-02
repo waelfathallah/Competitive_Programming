@@ -1,0 +1,81 @@
+// dijkastra
+
+#include <bits/stdc++.h>
+using namespace std;
+#define _ ios_base::sync_with_stdio(false);cin.tie(0);cout.tie(0);
+#define all(x) x.begin(),x.end()
+#define F first
+#define S second
+#define MP make_pair
+#define PB push_back
+#define MOD 1000000007
+typedef long long ll;
+const ll oo = 1e18;
+const int N = 2*1e5 + 5;
+const double eps = 1e-5;
+
+#define MAX 30
+#define cell pair< int, int >
+#define edge pair< int, cell >
+cell dir[4] = {cell(0,1), cell(1,0), cell(0,-1), cell(-1,0)};
+
+char grid[MAX][MAX];
+ll d[MAX][MAX];
+int n,m;
+
+bool valid(cell u) {
+	int i = u.first, j = u.second;
+	return (i>=0 && j>=0 && i<n && j<m && grid[i][j]!='X');
+}
+
+void dijkstra(cell start , cell dest){
+    int ui,uj,vi,vj,weight;
+    priority_queue< edge , vector<edge> , greater<edge> > q;
+    q.push(edge(0,start));
+    grid[start.F][start.S]='0';
+    for(int i=0;i<MAX;i++)
+        for(int j=0;j<MAX;j++)
+            d[i][j]=oo;
+    d[start.F][start.S]=0;
+    while(!q.empty()){
+        ui = q.top().S.F;
+        uj = q.top().S.S;
+        q.pop();
+        for(int i=0;i<4;i++){
+            vi = ui + dir[i].F;
+            vj = uj + dir[i].S;
+            if(valid(cell(vi,vj)) ){
+                if(grid[vi][vj]=='D')
+                    weight=0;
+                else
+                    weight=grid[vi][vj] - '0';
+                if(d[vi][vj] > d[ui][uj] + weight){
+                    d[vi][vj] = d[ui][uj] + weight;
+                    q.push(edge(d[vi][vj],cell(vi,vj)));
+                }
+            }
+        }
+        grid[ui][uj]='X';
+    }
+    if(d[dest.F][dest.S]!=oo)
+        cout << d[dest.F][dest.S] << endl;
+    else
+        cout << -1 << endl;
+}
+
+int main() {
+cell start,dest;
+
+    while(cin >> m >> n && n!=0 && m!=0){
+        for(int i=0;i<n;i++){
+                cin >> grid[i];
+                for(int j=0;j<m;j++)
+                    if(grid[i][j]=='S')
+                        start=cell(i,j);
+                for(int j=0;j<m;j++)
+                    if(grid[i][j]=='D')
+                        dest=cell(i,j);
+        }
+        dijkstra(start,dest);
+    }
+}
